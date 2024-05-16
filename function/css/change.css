@@ -1,0 +1,147 @@
+  .container {
+      width: 768px;
+      height: 550px;
+      position: absolute;
+      /* width: 100%; */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+  }
+
+  .body {
+      position: relative;
+  }
+
+  .change {
+      margin: 0 auto;
+      width: 80%;
+      height: 65%;
+      line-height: 65%;
+      border-radius: 15px;
+  }
+
+
+  .change img {
+      border-radius: 15px;
+  }
+
+  .change div {
+      text-align: center;
+  }
+
+  .change:hover {
+      box-shadow: 10px 15px 20px 1px black;
+  }
+
+  .change:not(:first-of-type) {
+      transition: all 1s ease-out;
+  }
+
+  .main_font {
+      width: 300px;
+      height: 320px;
+      padding-top: 30px;
+      font-size: 18px;
+      text-align: center;
+      background-color: pink;
+  }
+
+  .music-title {
+      font-size: 38px;
+      color: white;
+      font-weight: bold;
+      margin: 10px;
+  }
+
+  .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+  }
+
+  .controls button {
+      background-color: #ff6600;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  }
+
+  .controls button:hover {
+      background-color: #e65c00;
+  }
+
+  .audio-player {
+      width: 100%;
+      margin-top: 20px;
+  }
+
+  .audio-player audio {
+      width: 100%;
+      height: 20px;
+  }
+
+  /* 超小屏幕(<576px)布局容器的宽度为100% */
+  @media screen and (max-width: 575px) {
+      .container {
+          width: 500px;
+      }
+
+      #audio-player {
+          width: 70% !important;
+      }
+
+      .change {
+          width: 80%;
+          height: 45%;
+      }
+  }
+
+  /* 小屏幕(576px-767px)布局容器的宽度为540px */
+  @media screen and (min-width: 576px) {
+      .container {
+          width: 660px;
+          height: 400px;
+      }
+
+      #audio-player {
+          width: 65% !important;
+      }
+
+      .change {
+          width: 80%;
+          height: 70%;
+      }
+  }
+
+  /* 中屏幕(768px-991px)布局容器的宽度为768px */
+  @media screen and (min-width: 768px) {
+      .container {
+          width: 850px;
+          height: 600px;
+      }
+
+      #audio-player {
+          width: 70% !important;
+      }
+
+      .change {
+          height: 60%;
+      }
+  }
+
+  /* 大屏幕(991px-1200px)布局容器的宽度为1200px*/
+  @media screen and (min-width: 1200px) {
+      #audio-player {
+          width: 90% !important;
+      }
+
+      .change {
+          width: 100%;
+          height: 80%;
+      }
+  }

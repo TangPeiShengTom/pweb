@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>HTML5画布综合项目之拼图游戏</title>
+	<link rel="stylesheet" href="puzzle.css">
+</head>
+
+<body>
+	<div id="container">
+		<h3>HTML5画布之爱拼才会赢</h3>
+		<hr />
+		<div id="timeBox">
+			共计时间：<span id="time"></span>
+		</div>
+		<canvas id="myCanvas" width="300" height="300" style="border:1px solid"> 对不起，您的浏览器不支持HTML5画布API。</canvas>
+		<hr />
+		<div class="pic">
+			<button onclick="restartGame()">重新开始</button>
+			<img src="./124.jpg" alt="">
+		</div>
+	</div>
+	<script>
+		var c = document.getElementById('myCanvas');
+		var time = document.getElementById('time');
+		var ctx = c.getContext('2d');
+
+		var img = new Image();
+		img.src = "./124.jpg";
+		img.onload = function () {
+			generateNum();
+			drawCanvas();
+		}
+
+		var num = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+
+		function generateNum() {
+			for (var i = 0; i < 50; i++) {
+				var i1 = Math.floor(Math.random() * 3);
+				var j1 = Math.floor(Math.random() * 3);
+				var i2 = Math.floor(Math.random() * 3);
+				var j2 = Math.floor(Math.random() * 3);
+				var temp = num[i1][j1];
+				num[i1][j1] = num[i2][j2];
+				num[i2][j2] = temp;
+			}
+		}
+
+		var w = 100;
+
+		function drawCanvas() {
+			ctx.clearRect(0, 0, 300, 300);
+			for (var i = 0; i < 3; i++) {
+				for (var j = 0; j < 3; j++) {
+					if (num[i][j] != 8) {
+						var row = Math.floor(num[i][j] / 3);
+						var col = num[i][j] % 3;
+						ctx.drawImage(img, col * w, row * w, w, w, j * w, i * w, w, w);
+					}
+				}
+			}
+		}
+
+		c.onmousedown = function (e) {
+			var bound = c.getBoundingClientRect();
+			var x = e.pageX - bound.left;
+			var y = e.pageY - bound.top;
+
+			var row = Math.floor(y / w);
+			var col = Math.floor(x / w);
+
+			if (num[row][col] != 8) {
+				detectBox(row, col);
+				drawCanvas();
+				var isWin = checkWin();
+				if (isWin) {
+					clearInterval(timer);
+					ctx.drawImage(img, 0, 0);
+					ctx.font = "bold 68px serif";
+					ctx.fillStyle = "red";
+					ctx.fillText("恭喜完成拼图！", 20, 150);
+				}
+			}
+		}
+
+		var s = 0;
+		var m = 0;
+		var h = 0;
+
+
+		function getCurrentTime() {
+			s++;
+			if (s >= 60) {
+				s = 0;
+				m++;
+				if (m >= 60) {
+					m = 0;
+					h++;
+				}
+			}
+			var ss = s < 10 ? "0" + s : s;
+			var mm = m < 10 ? "0" + m : m;
+			var hh = h < 10 ? "0" + h : h;
+
+			time.innerText = `${hh}:${mm}:${ss}`;
+		}
+
+
+
+		var timer = setInterval(getCurrentTime, 1000);
+
+		function restartGame() {
+			clearInterval(timer);
+			s = 0;
+			m = 0;
+			h = 0;
+			getCurrentTime();
+			timer = setInterval(function () {
+				time.innerText = "";
+				getCurrentTime();
+			}, 1000);
+			generateNum();
+			drawCanvas();
+		}
+
+		function detectBox(row, col) {
+			if (row > 0 && num[row - 1][col] == 8) {
+				num[row - 1][col] = num[row][col];
+				num[row][col] = 8;
+			} else if (row < 2 && num[row + 1][col] == 8) {
+				num[row + 1][col] = num[row][col];
+				num[row][col] = 8;
+			} else if (col > 0 && num[row][col - 1] == 8) {
+				num[row][col - 1] = num[row][col];
+				num[row][col] = 8;
+			} else if (col < 2 && num[row][col + 1] == 8) {
+				num[row][col + 1] = num[row][col];
+				num[row][col] = 8;
+			}
+		}
+
+		function checkWin() {
+			var winNum = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
+			for (var i = 0; i < 3; i++) {
+				for (var j = 0; j < 3; j++) {
+					if (num[i][j] !== winNum[i][j]) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+	</script>
+</body>
+
+</html>

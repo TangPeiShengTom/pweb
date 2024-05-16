@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>clock</title>
+    <style>
+        body {
+            margin: 200px 0 0 600px;
+            width: 200px;
+            height: 40px;
+            border: 1px solid pink;
+            text-align: center;
+            line-height: 40px;
+            font-family: "Arial Black";
+        }
+
+        body a {
+            color: white;
+        }
+
+        #all {
+            background-color: #9d2b2a;
+        }
+
+
+        #time {
+            height: 100px;
+            float: initial;
+        }
+
+        #time div {
+            font-size: 20px;
+            display: inline;
+            background-color: #303331;
+            width: 20%;
+        }
+
+        #time a {
+            display: inline;
+            font-size: 20px;
+            line-height: 28px;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="all">
+        <div id="day"></div>
+        <h1><a>下班倒计时</a></h1>
+        <div id="time"></div>
+        <div><a>我们永不加班</a></div>
+    </div>
+
+    <script>
+        const div = document.querySelector('div #day')
+        const div01 = document.querySelector('div #time')
+        const date = new Date()
+        const str = `<a>今天是${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日</a>`
+        div.innerHTML = str
+
+
+
+        function getMyDate() {
+            let today = new Date();
+            let h = today.getHours();
+            let m = today.getMinutes();
+            let s = today.getSeconds();
+
+            h = h >= 10 ? h : '0' + h
+            m = m >= 10 ? m : '0' + m
+            s = s >= 10 ? s : '0' + s
+            return `<div>${h}</div><a>：</a><div>${m}</div><a>：</a><div>${s}</div>`
+        }
+
+        div01.innerHTML = getMyDate()
+        setInterval(function () {
+            div01.innerHTML = getMyDate()
+        }, 1000)
+
+    </script>
+</body>
+
+</html>

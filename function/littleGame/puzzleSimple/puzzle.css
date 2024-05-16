@@ -1,0 +1,43 @@
+body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#container {
+    text-align: center;
+    padding: 20px;
+}
+
+hr {
+    width: 400px;
+}
+
+
+.pic button {
+    margin-right: 80px;
+}
+
+.pic img {
+    width: 100px;
+    height: 100px;
+    float: left;
+}
+
+#myCanvas {
+    border: 1px solid #000;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

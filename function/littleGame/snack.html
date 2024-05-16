@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/snack.css">
+    <link rel="icon" href="../img/favicon1.ico">
+    <title>贪吃蛇</title>
+</head>
+
+<body>
+    <!-- 添加音乐 -->
+    <audio id="backgroundMusic" src="../../assets/snackBgm.mp3" loop></audio>
+    <audio id="audio1" src="../../assets/click.mp3"></audio>
+    <audio id="audio2" src="../../assets/snackDeath.mp3"></audio>
+    <!-- 游戏区 -->
+    <div class="box" id="box"></div>
+    <!-- 得分 -->
+    <div class="score">0</div>
+    <!-- 操作按钮提示 -->
+    <div class="bot-box">
+        <!-- 方向键 -->
+        <div class="handle-box">
+            <div class="direction-1">↑</div>
+            <div class="direction-2">←</div>
+            <div class="direction-3">↓</div>
+            <div class="direction-4">→</div>
+        </div>
+        <!-- 功能键 -->
+        <div>
+            <div class="key-box">
+                <div class="key">J</div>
+                <span>:开始游戏</span>
+            </div>
+            <div class="key-box">
+                <div class="key">K</div>
+                <span>:游戏暂停</span>
+            </div>
+            <div class="key-box">
+                <div class="key">R</div>
+                <span>:重新开始游戏</span>
+            </div>
+            <div class="key-box">
+                <div class="key">B</div>
+                <span>:返回首页</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取音乐元素
+        const backgroundMusic = document.getElementById('backgroundMusic');
+
+        // 播放音乐函数
+        function playBackgroundMusic() {
+            backgroundMusic.play();
+            // 移除事件监听器
+            document.removeEventListener('click', playBackgroundMusic);
+        }
+
+        // 添加点击事件监听器
+        document.addEventListener('keyup', playBackgroundMusic);
+
+        // 在页面离开时停止背景音乐
+        window.addEventListener('beforeunload', function () {
+            backgroundMusic.pause();
+        });
+
+
+
+        // 游戏区dom
+        const box = document.querySelector('.box')
+        // 分值dom
+        const score = document.querySelector('.score')
+        // 游戏格子
+        let gameBox = [40, 40]
+        // 游戏开始标志(计时器)
+        let start = null
+        // 当前速度
+        let velocity = 100
+        // 食物
+        let food = [[0, 20]]
+        // 蛇身
+        let snake = [[0, 12], [0, 13], [0, 14]]
+        // 方向
+        let direction = 3
+        // 数组转化为相应点坐标add
+        function transferPosition(array) {
+            let ary = []
+            for (let i = 0; i < array.length; i++) {
+                const e = [...array[i]];
+                ary.push(e[0] * gameBox[0] + e[1])
+            }
+            return ary
+        }
+        // 随机生成食物
+        function createFood() {
+            food = [[randomNumber(), randomNumber()]]
+        }
+        // 生成随机数
+        function randomNumber() {
+            return Number.parseInt(Math.random() * 40)
+        }
+        // 绘制
+        function draw() {
+            // 蛇身+蛇头对应的坐标
+            const snakeAry = transferPosition(snake)
+            // 食物对应的坐标
+            const foodAry = transferPosition(food)
+            box.innerHTML = ''
+            // 游戏区格子总长度
+            const allBox = gameBox[0] * gameBox[0]
+            for (let i = 0; i < allBox; i++) {
+                let div = document.createElement('div')
+                if (snakeAry.indexOf(i) === snakeAry.length - 1) {
+                    // 蛇头样式
+                    div.className = 'item snakeHead'
+                } else if (snakeAry.indexOf(i) !== -1) {
+                    // 蛇身样式
+                    div.className = 'item snakeBody'
+                } else if (foodAry.indexOf(i) !== -1) {
+                    // 食物样式
+                    div.className = 'item food'
+                } else {
+                    // 空白区
+                    div.className = 'item'
+                }
+                box.appendChild(div)
+            }
+        }
+
+        // 开始游戏之前先绘制一次
+        draw()
+        // 游戏结束(蛇死亡)
+        function endGame() {
+            clearInterval(start);
+            let audio2 = document.getElementById("audio2");
+            audio2.play();
+
+            // 使用原生的 confirm 对话框
+            let result = confirm(`游戏结束，本局得分:${snake.length - 3}分,再接再厉`);
+            if (result) {
+                setTimeout(() => {
+                    reBeginGame()
+                }, 500);
+            }
+        }
+
+        // 蛇移动
+        function move() {
+            // 深拷贝蛇行走之前的数组
+            let inventedSnake = []
+            for (let n = 0; n < snake.length; n++) {
+                const e = snake[n];
+                inventedSnake.push([...e])
+            }
+            // 判断行进方向，蛇身前进 direction：1左 2上 3右 4下
+            const lng = snake.length;
+            for (let i = lng - 1; i >= 0; i--) {
+                if (i === lng - 1) { // 蛇头前进
+                    if (direction === 1) {
+                        snake[i][1] = snake[i][1] - 1
+                    } else if (direction === 2) {
+                        snake[i][0] = snake[i][0] - 1
+                    } else if (direction === 3) {
+                        snake[i][1] = snake[i][1] + 1
+                    } else if (direction === 4) {
+                        snake[i][0] = snake[i][0] + 1
+                    }
+                }
+                else { // 蛇身前进
+                    snake[i] = inventedSnake[i + 1]
+                }
+            }
+        }
+        // 判断死亡
+        function judgingDeath() {
+            // 撞墙死亡
+            if (
+                snake[snake.length - 1][0] > (gameBox[0] - 1) ||
+                snake[snake.length - 1][0] < 0 ||
+                snake[snake.length - 1][1] > (gameBox[1] - 1) ||
+                snake[snake.length - 1][1] < 0
+            ) {
+                // 游戏结束
+                endGame()
+                return true
+            }
+            // 咬到自己死亡
+            for (let i = 0; i < snake.length; i++) {
+                for (let j = 0; j < i - 1; j++) {
+                    if (snake[i].toString() === snake[j].toString()) {
+                        // 游戏结束
+                        endGame()
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+        // 游戏开始 蛇开始爬行
+        function beginGame() {
+            // 游戏开始计时器
+            start = setInterval(() => {
+                // 判断死亡
+                if (judgingDeath()) return clearInterval(start)
+                // 蛇移动
+                move()
+                // 判断是否吃到食物
+                eatFood()
+                // 重绘
+                draw()
+            }, velocity);
+        }
+        // 重新开始
+        function reBeginGame() {
+            food = [[5, 5]]
+            snake = [[0, 12], [0, 13], [0, 14]]
+            direction = 3
+            score.innerHTML = 0
+            return beginGame();
+        }
+
+        // 游戏暂停
+        function suspendGame() {
+            clearInterval(start)
+        }
+
+        function exitGame() {
+            location.href = '../function.html'
+        }
+
+
+
+
+        // 监听键盘事件 爬行方向
+
+        goesTo = function (e) {
+            const { keyCode } = e
+            if (keyCode === 74) {
+                return beginGame()
+            }
+
+            if (keyCode === 75) {
+                return suspendGame()
+            }
+
+            if (keyCode === 82) {
+                return reBeginGame()
+            }
+
+            if (keyCode === 66) {
+                return exitGame()
+            }
+
+            if ((keyCode === 37 && direction !== 3) || (keyCode === 65 && direction !== 3)) {
+                return direction = 1
+            }
+
+            if ((keyCode === 38 && direction !== 4) || (keyCode === 87 && direction !== 4)) {
+                return direction = 2
+            }
+            if ((keyCode === 39 && direction !== 1) || (keyCode === 68 && direction !== 1)) {
+                return direction = 3
+            }
+            if ((keyCode === 40 && direction !== 2) || (keyCode === 83 && direction !== 2)) {
+                return direction = 4
+            }
+        }
+
+        window.onkeydown = goesTo
+
+        // 判断是否吃到食物
+        function eatFood() {
+            if (food.length === 0) return
+            // 蛇头和食物重合及吃到食物
+            if (snake[snake.length - 1].toString() === food[0].toString()) {
+                // 成长
+                growUp()
+                // 重新生成食物
+                createFood()
+            }
+        }
+
+        // 吃到食物 进行成长
+        function growUp() {
+            let snakeFood = []
+            let [x, y] = snake[snake.length - 1]
+            // 按照蛇头的方向在蛇头处成长
+            if (direction === 1) {
+                snakeFood = [x, y - 1]
+            } else if (direction === 2) {
+                snakeFood = [x - 1, y]
+            } else if (direction === 3) {
+                snakeFood = [x, y + 1]
+            } else if (direction === 4) {
+                snakeFood = [x + 1, y]
+            }
+            snake.push(snakeFood)
+            let audio = document.getElementById("audio1");
+            audio.currentTime = 0; // 重置音频的播放时间
+            audio.play();
+            // 重算积分（积分=蛇当前长度-初始长度）
+            score.innerHTML = snake.length - 3
+        }
+
+    </script>
+</body>
+
+</html>

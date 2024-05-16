@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>忘记密码</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            /* 隐藏溢出的内容 */
+        }
+
+        .marquee {
+            position: absolute;
+            top: -500px;
+            /* 初始位置在屏幕上方 */
+            left: 50%;
+            transform: translateX(-50%);
+            animation: marquee 3s linear infinite alternate;
+            /* 使用动画效果，并设置循环效果 */
+        }
+
+        .marquee:hover {
+            animation-play-state: paused;
+            /* 鼠标悬停时暂停动画 */
+        }
+
+        @keyframes marquee {
+            0% {
+                top: 0;
+            }
+
+            /* 初始位置在屏幕上方 */
+            80% {
+                top: 50%;
+            }
+
+            /* 中间位置在屏幕中间 */
+            100% {
+                top: 0;
+            }
+
+            /* 最终位置在屏幕下方 */
+        }
+
+        div {
+            width: 900px;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        p {
+            text-align: center;
+            margin: 200px auto;
+            font-size: 80px;
+            font-weight: 600;
+            color: black;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+        }
+
+        div span {
+            width: 100px;
+            height: 30px;
+            float: left;
+            margin: 0 0 0 780px;
+        }
+
+        div span:hover a {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="marquee">
+        <p>
+            忘记了就随他吧，骚年！
+        </p>
+        <div class="marquee">
+            <span><a href="index.html">回到首页</a></span>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏</title>
+    <style>
+        body {
+            font-size: 30px;
+            background: url("../img/gameBG3.jpg") no-repeat;
+            overflow: hidden;
+            background-size: 100% 100%;
+            width: 100vw;
+            height: 100vh;
+            background-attachment: fixed;
+        }
+
+        ul {
+            height: 300px;
+            overflow: scroll;
+        }
+
+        ul::-webkit-scrollbar {
+            display: none
+        }
+
+        li a {
+            text-decoration: none;
+            color: #000000;
+            font-family: "Arial Rounded MT Bold";
+            transition: all 0.6s;
+        }
+
+
+
+        li a:hover {
+            color: #feb483;
+            transform: translateY(-.3rem);
+        }
+
+        /*    li {!*这是最简单的li左边元素做法*!
+            list-style-type: '👉 ';
+        }*/
+
+        hr {
+            margin-left: -100px;
+            border: 1px solid skyblue;
+        }
+
+        li {
+            /* 利用flex布局把符号和内容放到同一行 */
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        li a {
+            color: #fff;
+        }
+
+        li::before {
+            /* 把项目符号设置为一条鱼 */
+            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' width='50' title='fish'%3E%3Cpath d='M327.1 96c-89.97 0-168.54 54.77-212.27 101.63L27.5 131.58c-12.13-9.18-30.24.6-27.14 14.66L24.54 256 .35 365.77c-3.1 14.06 15.01 23.83 27.14 14.66l87.33-66.05C158.55 361.23 237.13 416 327.1 416 464.56 416 576 288 576 256S464.56 96 327.1 96zm87.43 184c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24 13.26 0 24 10.74 24 24 0 13.25-10.75 24-24 24z' /%3E%3C/svg%3E");
+        }
+
+        li:nth-child(2n) {
+            margin-right: 40px;
+        }
+
+        li:nth-child(even) {
+            /* 偶数行的列表项符号和内容位置交换 */
+            flex-direction: row-reverse;
+        }
+
+        li:nth-child(even)::before {
+            /* 偶数行的列表项符号方向反转 */
+            transform: rotateY(180deg);
+        }
+
+        .importBody {
+            display: table;
+            margin: 100px auto;
+            width: 800px;
+            box-shadow: 2px 2px 20px 2px black;
+        }
+
+        @media screen and (max-width:576px) {
+            .importBody {
+                width: 100% !important;
+            }
+
+            .importBody ul li a::before {
+                display: none;
+            }
+
+            li:nth-child(even) {
+                flex-direction: row;
+            }
+
+            li:nth-child(even)::before {
+                transform: rotateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="importBody">
+        <ul>
+            <li><a href="snack.html">贪吃蛇</a></li>
+            <li><a href="textGame.html">打字游戏</a></li>
+            <li><a href="./man-down100/index.html">是男人就下100层</a></li>
+            <li><a href="./allalive/index.html">一个都不能死</a></li>
+            <li><a href="./five-chess/index.html">五子棋</a></li>
+            <li><a href="../littleGame/saolei.html">扫雷</a></li>
+            <li><a href="./heroMaster/game.html">英雄捉怪</a></li>
+            <li><a href="./PlantsVsZombies/index.html">植物大战僵尸</a></li>
+            <li><a href="./fruitCut/index.html">经典水果忍者</a></li>
+            <li><a href="./puzzleSimple/puzzle.html">爱拼才会赢</a></li>
+        </ul>
+    </div>
+
+</body>
+
+</html>
